@@ -7,8 +7,13 @@
 //
 
 #import "ViewController.h"
+#import "PMCircleProgressView.h"
+
+#define PROGRESS_WIDTH 200
 
 @interface ViewController ()
+
+@property (nonatomic) PMCircleProgressView *progressBar;
 
 @end
 
@@ -18,6 +23,18 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    self.progressBar = [[PMCircleProgressView alloc] initWithFrame:CGRectMake(0, 0, PROGRESS_WIDTH, PROGRESS_WIDTH)];
+    self.progressBar.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
+    [self.view addSubview:self.progressBar];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+    [self.progressBar setProgress:1.0 animated:YES isResume:NO block:^(BOOL completed) {
+        
+    }];
 }
 
 - (void)didReceiveMemoryWarning

@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^PMCircleProgressViewAnimationBlock)(BOOL completed);
+
 @interface PMCircleProgressView : UIView
+
+// Public Properties
+@property (nonatomic, assign) CGFloat innerPadding;
+@property (nonatomic) UIColor *circleTintColor;
+
+-(void)setProgress:(CGFloat)progress animated:(BOOL)animated isResume:(BOOL)isResume block:(PMCircleProgressViewAnimationBlock)block;
 
 @end
