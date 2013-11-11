@@ -17,22 +17,22 @@ Animated circle progressview
 Import headr file
 
 ```objective-c
-\#import "PMCircleProgressView.h"
+#import "PMCircleProgressView.h"
 ```
 
 Create object
 
 ```objective-c
 PMCircleProgressView *progressBar = [[PMCircleProgressView alloc] initWithFrame:CGRectMake(0, 0, PROGRESS_WIDTH, PROGRESS_WIDTH)];
-    progressBar.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
-    [self.view addSubview:progressBar];
+progressBar.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
+[self.view addSubview:progressBar];
 ```
 
 Call animation method
 
 ```objective-c
 [progressBar setProgress:1.0 duration:1.0 block:^(BOOL completed) {
-        NSLog(@"%s Animation Completed.",__func__);
-    }];
+    NSLog(@"%s Animation Completed.",__func__);
+}];
 ```
 
