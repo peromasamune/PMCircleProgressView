@@ -7,15 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PMAnimationLabel.h"
 
 typedef void (^PMCircleProgressViewAnimationBlock)(BOOL completed);
 
-@interface PMCircleProgressView : UIView
+@interface PMCircleProgressView : UIView <PMAnimationLabelDelegate>
 
 // Public Properties
 @property (nonatomic, assign) CGFloat innerPadding;
 @property (nonatomic) UIColor *circleTintColor;
+@property (nonatomic) PMAnimationLabel *percentageLabel;
 
--(void)setProgress:(CGFloat)progress animated:(BOOL)animated isResume:(BOOL)isResume block:(PMCircleProgressViewAnimationBlock)block;
+-(void)setProgress:(float)progress duration:(NSTimeInterval)duration block:(PMCircleProgressViewAnimationBlock)block;
 
 @end

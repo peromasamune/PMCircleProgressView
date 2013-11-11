@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		30750A8918311A0800297E45 /* PMAnimationLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 30750A8818311A0800297E45 /* PMAnimationLabel.m */; };
 		9F8E67F0182B8F6900B09531 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F8E67EF182B8F6900B09531 /* Foundation.framework */; };
 		9F8E67F2182B8F6900B09531 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F8E67F1182B8F6900B09531 /* CoreGraphics.framework */; };
 		9F8E67F4182B8F6900B09531 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F8E67F3182B8F6900B09531 /* UIKit.framework */; };
@@ -34,6 +35,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		30750A8718311A0800297E45 /* PMAnimationLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PMAnimationLabel.h; path = Classes/PMAnimationLabel.h; sourceTree = "<group>"; };
+		30750A8818311A0800297E45 /* PMAnimationLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMAnimationLabel.m; path = Classes/PMAnimationLabel.m; sourceTree = "<group>"; };
 		9F8E67EC182B8F6900B09531 /* PMCircleProgressBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PMCircleProgressBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F8E67EF182B8F6900B09531 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9F8E67F1182B8F6900B09531 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -158,6 +161,8 @@
 			children = (
 				9F8E6825182B8F9C00B09531 /* PMCircleProgressView.h */,
 				9F8E6826182B8F9C00B09531 /* PMCircleProgressView.m */,
+				30750A8718311A0800297E45 /* PMAnimationLabel.h */,
+				30750A8818311A0800297E45 /* PMAnimationLabel.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -260,6 +265,7 @@
 			files = (
 				9F8E6827182B8F9C00B09531 /* PMCircleProgressView.m in Sources */,
 				9F8E6806182B8F6900B09531 /* ViewController.m in Sources */,
+				30750A8918311A0800297E45 /* PMAnimationLabel.m in Sources */,
 				9F8E6800182B8F6900B09531 /* AppDelegate.m in Sources */,
 				9F8E67FC182B8F6900B09531 /* main.m in Sources */,
 			);
@@ -462,6 +468,7 @@
 				9F8E6820182B8F6900B09531 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9F8E6821182B8F6900B09531 /* Build configuration list for PBXNativeTarget "PMCircleProgressBarTests" */ = {
 			isa = XCConfigurationList;
@@ -470,6 +477,7 @@
 				9F8E6823182B8F6900B09531 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

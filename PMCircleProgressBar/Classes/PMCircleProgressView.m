@@ -15,11 +15,13 @@
 #define PROGRES_TO_RADIANS(progress)((M_PI * (360 * progress - 90))/180)
 
 @interface PMCircleProgressView(){
-    CAShapeLayer *innerCircleLayer;
 }
 
 //Private properties
-@property (nonatomic, assign) CGFloat progress, preProgress; // 0 ~ 1
+@property (nonatomic, assign) float progress; // 0 ~ 1
+@property (nonatomic, assign) NSTimeInterval duration;
+@property (nonatomic) CAShapeLayer *innerCircleLayer;
+@property (nonatomic, copy) PMCircleProgressViewAnimationBlock block;
 
 @end
 
@@ -27,7 +29,7 @@
 
 @synthesize innerPadding = innerPadding_;
 @synthesize progress = progress_;
-@synthesize preProgress = preProgress_;
+@synthesize duration = duration_;
 
 #pragma mark -- Initializer --
 
@@ -40,33 +42,46 @@
         self.innerPadding = kPMCircleProgressInnerRadiusDefault;
         self.circleTintColor = PMCircleProgressTintColorDefault;
         self.progress = 0.f;
-        self.preProgress = 0.f;
         
         self.backgroundColor = [UIColor clearColor];
+        
+        self.percentageLabel = [[PMAnimationLabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width-40, 20)];
+        self.percentageLabel.delegate = self;
+        self.percentageLabel.center = CGPointMake(frame.size.width/2, frame.size.height/2);
+        self.percentageLabel.backgroundColor = [UIColor clearColor];
+        self.percentageLabel.textColor = [UIColor whiteColor];
+        self.percentageLabel.font = [UIFont systemFontOfSize:20];
+        self.percentageLabel.textAlignment = NSTextAlignmentCenter;
+        self.percentageLabel.text = @"0%";
+        self.percentageLabel.suffix = @"%";
+        [self addSubview:self.percentageLabel];
     }
     return self;
 }
 
 #pragma mark -- Class methods --
 
-- (void)setProgress:(CGFloat)progress animated:(BOOL)animated isResume:(BOOL)isResume block:(PMCircleProgressViewAnimationBlock)block{
-    if (!isResume) {
-        preProgress_ = 0.f;
-    }
+- (void)setProgress:(float)progress duration:(NSTimeInterval)duration block:(PMCircleProgressViewAnimationBlock)block{
     
-    //progress_ = progress;
+    progress_ = progress;
+    duration_ = duration;
+    self.block = block;
+
+    [self layoutInnerCircle];
+    [self startCircleAnimation];
+    [self bringSubviewToFront:self.percentageLabel];
+}
+
+#pragma mark -- Private Methods --
+
+-(void)changeAppearanceFormValue:(float)value{
     
-    //[self setNeedsDisplay];
-    //[self layoutInnerCircle];
-    
-    double frameRate = 0.0;
-    for (int i=0; i < 30; i++) {
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(frameRate * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [self setNeedsDisplay];
-            progress_ += progress / 30;
-        });
-        frameRate += 0.1;
+    if (value < 0.2f) {
+        self.innerCircleLayer.strokeColor = [UIColor redColor].CGColor;
+    }else if (value < 0.5f){
+        self.innerCircleLayer.strokeColor = [UIColor yellowColor].CGColor;
+    }else{
+        self.innerCircleLayer.strokeColor = [UIColor greenColor].CGColor;
     }
 }
 
@@ -76,64 +91,99 @@
 {
     // General params
     CGPoint center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
-    CGFloat radius = self.frame.size.width/2 - self.innerPadding - 5;
+    CGFloat radius = self.frame.size.width/2 - 5;
     //CGFloat innerRadius = radius - innerPadding_;
     
     // Back circle
     UIBezierPath *backCirclePath = [UIBezierPath bezierPathWithArcCenter:center
-                                                                  radius:radius
+                                                                  radius:radius/2
                                                               startAngle:DEGREES_TO_RADIANS(0.f)
                                                                 endAngle:DEGREES_TO_RADIANS(360.f)
                                                                clockwise:YES];
-    [self.circleTintColor setStroke];
-    backCirclePath.lineWidth = innerPadding_;
+    [[UIColor lightGrayColor] setStroke];
+    backCirclePath.lineWidth = radius;
     [backCirclePath stroke];
     
     // Draw back circle shadow
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextAddPath(context, backCirclePath.CGPath);
-    CGContextSetLineWidth(context, innerPadding_);
-    CGContextSetShadowWithColor(context, CGSizeMake(5.0, 5.0), 3.0, [UIColor colorWithWhite:0.000 alpha:0.3].CGColor);
+    CGContextSetLineWidth(context, radius);
+    CGContextSetShadowWithColor(context, CGSizeMake(1.0, 1.0), 5.0, [UIColor colorWithWhite:0.000 alpha:0.5].CGColor);
     CGContextStrokePath(context);
     
     // Inner circle
-    UIBezierPath *innerCirclePath = [UIBezierPath bezierPathWithArcCenter:center
-                                                                   radius:radius/2+10
-                                                               startAngle:PROGRES_TO_RADIANS(preProgress_)
-                                                                 endAngle:PROGRES_TO_RADIANS(progress_)
-                                                                clockwise:YES];
-    [self.circleTintColor setStroke];
-    innerCirclePath.lineWidth = radius - 20;
-    [innerCirclePath stroke];
+//    UIBezierPath *innerCirclePath = [UIBezierPath bezierPathWithArcCenter:center
+//                                                                   radius:radius/2+10
+//                                                               startAngle:PROGRES_TO_RADIANS(preProgress_)
+//                                                                 endAngle:PROGRES_TO_RADIANS(progress_)
+//                                                                clockwise:YES];
+//    [self.circleTintColor setStroke];
+//    innerCirclePath.lineWidth = radius - 20;
+//    [innerCirclePath stroke];
 }
 
 -(void)layoutInnerCircle{
     
-    if (innerCircleLayer) {
-        [innerCircleLayer removeFromSuperlayer];
-    }
+//    if (self.innerCircleLayer) {
+//        [self.innerCircleLayer removeFromSuperlayer];
+//        self.innerCircleLayer = nil;
+//    }
     
     CGPoint center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
-    CGFloat radius = self.frame.size.width/2 - self.innerPadding - 5;
+    CGFloat radius = self.frame.size.width/2 - 5;
     
     // Inner circle
     UIBezierPath *innerCirclePath = [UIBezierPath bezierPathWithArcCenter:center
                                                                    radius:radius/2
-                                                               startAngle:PROGRES_TO_RADIANS(preProgress_)
+                                                               startAngle:PROGRES_TO_RADIANS(0.f)
                                                                  endAngle:PROGRES_TO_RADIANS(progress_)
                                                                 clockwise:YES];
     
-    innerCircleLayer = [CAShapeLayer layer];
-    innerCircleLayer.path = innerCirclePath.CGPath;
-    innerCircleLayer.strokeColor = self.circleTintColor.CGColor;
-    innerCircleLayer.lineWidth = radius;
-    innerCircleLayer.strokeEnd = 0.f;
+    if (self.innerCircleLayer == nil) {
+        self.innerCircleLayer = [CAShapeLayer layer];
+    }
+    self.innerCircleLayer.path = innerCirclePath.CGPath;
+    self.innerCircleLayer.fillColor = [UIColor clearColor].CGColor;
+    self.innerCircleLayer.strokeColor = self.circleTintColor.CGColor;
+    self.innerCircleLayer.lineWidth = radius;
     
-    [self.layer addSublayer:innerCircleLayer];
+    [self.layer addSublayer:self.innerCircleLayer];
+}
+
+-(void)startCircleAnimation{
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    animation.duration = duration_;
+    animation.repeatCount = 0;
+    animation.removedOnCompletion = NO;
+    animation.delegate = self;
     
-    [UIView animateWithDuration:3.0 animations:^{
-        //innerCircleLayer.strokeEnd = 1.f;
-    }];
+    animation.fromValue = [NSNumber numberWithFloat:0.0];
+    animation.toValue = [NSNumber numberWithFloat:1.0];
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    [self.innerCircleLayer addAnimation:animation forKey:@"circleAnimation"];
+    
+    [self.percentageLabel animationFrom:0.f to:self.progress withDuration:duration_];
+}
+
+#pragma mark -- CAAnimationDelegate --
+-(void)animationDidStart:(CAAnimation *)anim{
+    
+}
+
+-(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
+    
+}
+
+#pragma mark -- PMAnimationLabelDelegate
+-(void)animationLabelValueDidChange:(float)value{
+    [self changeAppearanceFormValue:value];
+}
+
+-(void)animationLabelDidFinishAnimation{
+    if (self.block != nil) {
+        self.block(YES);
+    }
 }
 
 @end
