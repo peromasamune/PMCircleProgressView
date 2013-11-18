@@ -10,6 +10,7 @@
 
 #define kPMCircleProgressInnerRadiusDefault 5
 #define PMCircleProgressTintColorDefault [UIColor blueColor];
+#define PMCircleProgressBackgroundTintColorDefault [UIColor lightGrayColor];
 
 #define DEGREES_TO_RADIANS(degrees) ((M_PI * (degrees - 90))/180)
 #define PROGRES_TO_RADIANS(progress)((M_PI * (360 * progress - 90))/180)
@@ -42,6 +43,8 @@
         self.innerPadding = kPMCircleProgressInnerRadiusDefault;
         self.circleTintColor = PMCircleProgressTintColorDefault;
         self.progress = 0.f;
+        self.isShowInnerShadow = NO;
+        self.isShowBackShadow = NO;
         
         self.backgroundColor = [UIColor clearColor];
         
@@ -50,7 +53,7 @@
         self.percentageLabel.center = CGPointMake(frame.size.width/2, frame.size.height/2);
         self.percentageLabel.backgroundColor = [UIColor clearColor];
         self.percentageLabel.textColor = [UIColor whiteColor];
-        self.percentageLabel.font = [UIFont systemFontOfSize:20];
+        self.percentageLabel.font = [UIFont boldSystemFontOfSize:22];
         self.percentageLabel.textAlignment = NSTextAlignmentCenter;
         self.percentageLabel.text = @"0%";
         self.percentageLabel.suffix = @"%";
@@ -100,16 +103,18 @@
                                                               startAngle:DEGREES_TO_RADIANS(0.f)
                                                                 endAngle:DEGREES_TO_RADIANS(360.f)
                                                                clockwise:YES];
-    [[UIColor lightGrayColor] setStroke];
+    [self.circleBackgroundTintColor setStroke];
     backCirclePath.lineWidth = radius;
     [backCirclePath stroke];
     
     // Draw back circle shadow
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextAddPath(context, backCirclePath.CGPath);
-    CGContextSetLineWidth(context, radius);
-    CGContextSetShadowWithColor(context, CGSizeMake(1.0, 1.0), 5.0, [UIColor colorWithWhite:0.000 alpha:0.5].CGColor);
-    CGContextStrokePath(context);
+    if (self.isShowBackShadow) {
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextAddPath(context, backCirclePath.CGPath);
+        CGContextSetLineWidth(context, radius);
+        CGContextSetShadowWithColor(context, CGSizeMake(1.0, 1.0), 5.0, [UIColor colorWithWhite:0.000 alpha:0.5].CGColor);
+        CGContextStrokePath(context);
+    }
     
     // Inner circle
 //    UIBezierPath *innerCirclePath = [UIBezierPath bezierPathWithArcCenter:center
@@ -134,7 +139,7 @@
     
     // Inner circle
     UIBezierPath *innerCirclePath = [UIBezierPath bezierPathWithArcCenter:center
-                                                                   radius:radius/2
+                                                                   radius:(radius+self.innerPadding)/2
                                                                startAngle:PROGRES_TO_RADIANS(0.f)
                                                                  endAngle:PROGRES_TO_RADIANS(progress_)
                                                                 clockwise:YES];
@@ -145,7 +150,12 @@
     self.innerCircleLayer.path = innerCirclePath.CGPath;
     self.innerCircleLayer.fillColor = [UIColor clearColor].CGColor;
     self.innerCircleLayer.strokeColor = self.circleTintColor.CGColor;
-    self.innerCircleLayer.lineWidth = radius;
+    self.innerCircleLayer.lineWidth = radius - self.innerPadding;
+    if (self.isShowInnerShadow) {
+        self.innerCircleLayer.shadowColor = [UIColor blackColor].CGColor;
+        self.innerCircleLayer.shadowOffset = CGSizeMake(5.f, 5.f);
+        self.innerCircleLayer.shadowOpacity = 0.5;
+    }
     
     [self.layer addSublayer:self.innerCircleLayer];
 }

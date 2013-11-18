@@ -14,7 +14,6 @@
 @interface ViewController ()
 
 @property (nonatomic) PMCircleProgressView *progressBar;
-@property (nonatomic) float progress;
 
 -(void)startAnimationButtonDidPush:(id)sender;
 
@@ -27,8 +26,23 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
+    //PMCircleProgressView instance settings
+    
+    //Initialize and set frame
     self.progressBar = [[PMCircleProgressView alloc] initWithFrame:CGRectMake(0, 0, PROGRESS_WIDTH, PROGRESS_WIDTH)];
     self.progressBar.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
+    
+    //Meter innter padding
+    self.progressBar.innerPadding = 50;
+    
+    //Circle color
+    self.progressBar.circleBackgroundTintColor = [UIColor whiteColor];
+    self.progressBar.percentageLabel.textColor = [UIColor blackColor];
+    
+    //Circle shadow
+    self.progressBar.isShowInnerShadow = YES;
+    self.progressBar.isShowBackShadow = NO;
+    
     [self.view addSubview:self.progressBar];
     
     UIButton *startAnimationButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -53,12 +67,8 @@
 
 -(void)startAnimationButtonDidPush:(id)sender{
     
-    if (self.progress > 1.f) {
-        self.progress = 0.f;
-    }
-    
-    self.progress += 0.1f;
-    [self.progressBar setProgress:self.progress duration:1.0 block:^(BOOL completed) {
+    //Start progress animation
+    [self.progressBar setProgress:0.8 duration:1.0 block:^(BOOL completed) {
         NSLog(@"%s Animation Completed.",__func__);
     }];
 }
