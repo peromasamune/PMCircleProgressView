@@ -16,6 +16,8 @@ typedef void (^PMCircleProgressViewAnimationBlock)(BOOL completed);
 // Public Properties
 @property (nonatomic, assign) CGFloat innerPadding;
 @property (nonatomic) UIColor *circleTintColor;
+@property (nonatomic) UIColor *circleBackgroundTintColor;
+@property (nonatomic, assign) BOOL isShowBackShadow,isShowInnerShadow;
 @property (nonatomic) PMAnimationLabel *percentageLabel;
 
 -(void)setProgress:(float)progress duration:(NSTimeInterval)duration block:(PMCircleProgressViewAnimationBlock)block;
