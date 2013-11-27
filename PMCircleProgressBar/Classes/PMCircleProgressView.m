@@ -79,9 +79,9 @@
 
 -(void)changeAppearanceFormValue:(float)value{
     
-    if (value < 0.2f) {
+    if (value < 20.f) {
         self.innerCircleLayer.strokeColor = [UIColor redColor].CGColor;
-    }else if (value < 0.5f){
+    }else if (value < 50.f){
         self.innerCircleLayer.strokeColor = [UIColor yellowColor].CGColor;
     }else{
         self.innerCircleLayer.strokeColor = [UIColor greenColor].CGColor;
@@ -186,7 +186,7 @@
 }
 
 #pragma mark -- PMAnimationLabelDelegate
--(void)animationLabelValueDidChange:(float)value{
+-(void)animationLabelValueDidChange:(long)value{
     [self changeAppearanceFormValue:value];
 }
 

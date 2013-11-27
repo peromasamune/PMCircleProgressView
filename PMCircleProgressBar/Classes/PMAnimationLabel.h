@@ -20,6 +20,6 @@
 
 @protocol PMAnimationLabelDelegate <NSObject>
 @optional
--(void)animationLabelValueDidChange:(float)value;
+-(void)animationLabelValueDidChange:(long)value;
 -(void)animationLabelDidFinishAnimation;
 @end
