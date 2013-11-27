@@ -173,7 +173,7 @@
     
     [self.innerCircleLayer addAnimation:animation forKey:@"circleAnimation"];
     
-    [self.percentageLabel animationFrom:0.f to:self.progress withDuration:duration_];
+    [self.percentageLabel animationFrom:0.f to:self.progress*100 withDuration:duration_];
 }
 
 #pragma mark -- CAAnimationDelegate --
