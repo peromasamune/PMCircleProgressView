@@ -9,7 +9,7 @@
 #import "PMCircleProgressView.h"
 
 #define kPMCircleProgressInnerRadiusDefault 5
-#define PMCircleProgressTintColorDefault [UIColor blueColor];
+#define PMCircleProgressTintColorDefault [UIColor colorWithRed:0.008 green:0.741 blue:0.604 alpha:1.000];
 #define PMCircleProgressBackgroundTintColorDefault [UIColor lightGrayColor];
 
 #define DEGREES_TO_RADIANS(degrees) ((M_PI * (degrees - 90))/180)
@@ -45,6 +45,7 @@
         self.progress = 0.f;
         self.isShowInnerShadow = NO;
         self.isShowBackShadow = NO;
+        self.circleAlpha = 1.0;
         
         self.backgroundColor = [UIColor clearColor];
         
@@ -80,11 +81,11 @@
 -(void)changeAppearanceFormValue:(float)value{
     
     if (value < 20.f) {
-        self.innerCircleLayer.strokeColor = [UIColor redColor].CGColor;
+        self.innerCircleLayer.strokeColor = [UIColor colorWithRed:0.949 green:0.275 blue:0.239 alpha:self.circleAlpha].CGColor;
     }else if (value < 50.f){
-        self.innerCircleLayer.strokeColor = [UIColor yellowColor].CGColor;
+        self.innerCircleLayer.strokeColor = [UIColor colorWithRed:0.969 green:0.765 blue:0.004 alpha:self.circleAlpha].CGColor;
     }else{
-        self.innerCircleLayer.strokeColor = [UIColor greenColor].CGColor;
+        self.innerCircleLayer.strokeColor = [UIColor colorWithRed:0.008 green:0.741 blue:0.604 alpha:self.circleAlpha].CGColor;
     }
 }
 
