@@ -20,6 +20,7 @@ typedef void (^PMCircleProgressViewAnimationBlock)(BOOL completed);
 @property (nonatomic, assign) BOOL isShowBackShadow,isShowInnerShadow;
 @property (nonatomic) PMAnimationLabel *percentageLabel;
 @property (nonatomic, assign) CGFloat circleAlpha;
+@property (nonatomic, readonly) float progress; // 0 ~ 1
 
 -(void)setProgress:(float)progress duration:(NSTimeInterval)duration block:(PMCircleProgressViewAnimationBlock)block;
 
