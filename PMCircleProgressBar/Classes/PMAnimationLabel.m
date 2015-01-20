@@ -11,7 +11,8 @@
 @interface PMAnimationLabel()
 -(float)update:(float)t;
 
-@property (nonatomic, assign) float startValue,endValue,rate,totaltime;
+@property (nonatomic, assign) long startValue,endValue,rate;
+@property (nonatomic, assign) float totaltime;
 @property (nonatomic, assign) CFTimeInterval startTime;
 
 @end
@@ -33,12 +34,12 @@
 
 #pragma mark -- Class Method --
 
--(void)animationFrom:(float)fromValue to:(float)toValue withDuration:(NSTimeInterval)duration{
+-(void)animationFrom:(long)fromValue to:(long)toValue withDuration:(NSTimeInterval)duration{
     self.startValue = fromValue;
     self.endValue = toValue;
     self.totaltime = duration;
     
-    self.text = [self getTextFromProgress:self.startValue];
+    self.text = [self getTextFromValue:self.startValue];
     
     CADisplayLink *link = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateValue:)];
     self.startTime = CACurrentMediaTime();
@@ -50,20 +51,19 @@
 -(void)updateValue:(CADisplayLink *)link{
     float dt = ([link timestamp] - self.startTime) / self.totaltime;
     if (dt >= 1.0) {
-        self.text = [self getTextFromProgress:self.endValue];
+        self.text = [self getTextFromValue:self.endValue];
         [link removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
         [self.delegate animationLabelDidFinishAnimation];
         return;
     }
     
-    //float current = [self update:dt*self.endValue];
-    float current = (self.endValue - self.startValue) * dt + self.startValue;
-    self.text = [self getTextFromProgress:current];
+    long current = (self.endValue - self.startValue) * dt + self.startValue;
+    self.text = [self getTextFromValue:current];
     [self.delegate animationLabelValueDidChange:current];
 }
 
--(NSString *)getTextFromProgress:(CGFloat)progress{
-    int percentage = (int)floor(progress * 100);
+-(NSString *)getTextFromValue:(long)progress{
+    int percentage = (int)floor(progress);
     return [NSString stringWithFormat:@"%i%@",percentage,self.suffix];
 }
 

@@ -11,7 +11,7 @@
 @protocol PMAnimationLabelDelegate;
 @interface PMAnimationLabel : UILabel
 
--(void)animationFrom:(float)fromValue to:(float)toValue withDuration:(NSTimeInterval)duration;
+-(void)animationFrom:(long)fromValue to:(long)toValue withDuration:(NSTimeInterval)duration;
 
 @property (nonatomic) NSString *suffix;
 @property (nonatomic, assign) id<PMAnimationLabelDelegate> delegate;
@@ -20,6 +20,6 @@
 
 @protocol PMAnimationLabelDelegate <NSObject>
 @optional
--(void)animationLabelValueDidChange:(float)value;
+-(void)animationLabelValueDidChange:(long)value;
 -(void)animationLabelDidFinishAnimation;
 @end
