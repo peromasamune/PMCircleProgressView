@@ -70,6 +70,14 @@
     [self bringSubviewToFront:self.percentageLabel];
 }
 
+-(void)setCircleTintColor:(UIColor *)circleTintColor{
+    _circleTintColor = (circleTintColor) ? circleTintColor : PMCircleProgressTintColorDefault;
+
+    if (self.innerCircleLayer) {
+        self.innerCircleLayer.strokeColor = circleTintColor.CGColor;
+    }
+}
+
 #pragma mark -- Private Methods --
 
 -(void)changeAppearanceFormValue:(float)value{
